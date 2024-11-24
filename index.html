@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Salvium - The Next Generation of Compliant Private Blockchain</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #00FFB2;
+            --primary-glow: rgba(0, 255, 178, 0.3);
+            --secondary-color: #0A0F16;
+            --text-color: #FFF;
+            --dark-primary: #00CC8E;
+            --accent-color: #FF3366;
+            --light-primary: rgba(0, 255, 178, 0.1);
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            cursor: default;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: 
+                linear-gradient(to bottom, var(--secondary-color), rgba(10, 15, 22, 0.95)),
+                radial-gradient(circle at center, rgba(0, 255, 178, 0.15) 0%, transparent 70%),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent 0px,
+                    transparent 10px,
+                    rgba(0, 255, 178, 0.03) 10px,
+                    transparent 20px
+                );
+            background-attachment: fixed;
+            color: var(--text-color);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 255, 178, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 178, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, 
+                var(--primary-color),
+                var(--dark-primary)
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 
+                0 0 10px rgba(0, 255, 178, 0.3),
+                0 0 20px rgba(0, 255, 178, 0.2);
+            animation: textGlow 8s linear infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(10deg); }
+        }
+
+        .hero-gradient {
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 178, 0.15) 0%, rgba(24, 24, 24, 0) 70%),
+                linear-gradient(45deg, rgba(24, 24, 24, 0.9), rgba(0, 255, 178, 0.1));
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary-color);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.3;
+            box-shadow: 
+                0 0 15px var(--primary-glow),
+                0 0 30px var(--primary-glow);
+            animation: particlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes particlePulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.5; }
+        }
+
+        .hero-card {
+            background: rgba(24, 24, 24, 0.7);
+            border: 1px solid rgba(0, 255, 178, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 178, 0.1),
+                inset 0 0 20px rgba(0, 255, 178, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before,
+        .hero-card::after {
+            content: '';
+            position: absolute;
+            inset: -150%;
+            background: conic-gradient(
+                from 0deg at 50% 50%,
+                transparent 0deg,
+                var(--primary-color) 60deg,
+                transparent 120deg
+            );
+            animation: borderRotate 8s linear infinite;
+        }
+
+        .hero-card::after {
+            animation-direction: reverse;
+            animation-duration: 6s;
+        }
+
+        @keyframes borderRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--primary-color);
+            box-shadow: 
+                0 10px 30px rgba(0, 255, 178, 0.2),
+                inset 0 0 30px rgba(0, 255, 178, 0.1);
+        }
+
+        .hero-stats {
+            background: rgba(0, 255, 178, 0.05);
+            border: 1px solid rgba(0, 255, 178, 0.2);
+            box-shadow: 
+                0 0 20px rgba(0, 255, 178, 0.1),
+                inset 0 0 20px rgba(0, 255, 178, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-stats::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 45%,
+                rgba(0, 255, 178, 0.1) 50%,
+                transparent 55%
+            );
+            animation: statsScan 3s linear infinite;
+        }
+
+        @keyframes statsScan {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+            will-change: transform;
+            filter: 
+                drop-shadow(0 0 15px var(--primary-glow))
+                drop-shadow(0 0 30px rgba(0, 255, 178, 0.2));
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 178, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(0, 255, 178, 0.05),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 
+                0 10px 30px rgba(0, 255, 178, 0.1),
+                inset 0 0 30px rgba(0, 255, 178, 0.05);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-effect:hover {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .get-started-btn {
+            background: linear-gradient(45deg, var(--primary-color), #00D9B2);
+            color: black;
+            position: relative;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: 600;
+            box-shadow: 
+                0 4px 15px rgba(0, 255, 178, 0.3),
+                inset 0 -2px 5px rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .get-started-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.4) 0%,
+                transparent 60%
+            );
+            transform: scale(0);
+            transition: transform 0.5s ease;
+        }
+
+        .get-started-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 20px rgba(0, 255, 178, 0.4),
+                inset 0 -2px 5px rgba(255, 255, 255, 0.2);
+        }
+
+        .get-started-btn:hover::after {
+            transform: scale(1);
+        }
+
+        .modern-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            color: var(--secondary-color);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modern-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .modern-button:hover::before {
+            left: 100%;
+        }
+
+        .float-element {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+        }
+
+        .navbar {
+            background: rgba(24, 24, 24, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 178, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 178, 0.1);
+        }
+
+        /* Matrix rain effect */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.05;
+        }
+
+        /* Cyberpunk grid */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 178, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 178, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: var(--secondary-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--primary-color), var(--dark-primary));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 255, 178, 0.05);
+        }
+
+        /* Selection style */
+        ::selection {
+            background: var(--primary-color);
+            color: var(--secondary-color);
+        }
+
+        /* Cool icon animations */
+        .icon-container {
+            position: relative;
+            width: 64px;
+            height: 64px;
+        }
+
+        .icon-container svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 8px var(--primary-color));
+        }
+
+        .icon-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 255, 178, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .feature-card:hover .icon-container svg {
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Social icons styling */
+        .social-icon {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 4px var(--primary-color));
+        }
+
+        .social-icon:hover {
+            transform: translateY(-2px);
+            filter: drop-shadow(0 0 8px var(--primary-color));
+        }
+
+        /* Features section icons */
+        .feature-icon {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 0 8px var(--primary-color));
+            transition: all 0.3s ease;
+        }
+
+        .feature-icon:hover {
+            transform: translateY(-2px);
+            filter: drop-shadow(0 0 12px var(--primary-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar fixed w-full top-0 z-50 px-4 py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center z-50">
+                <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-300">
+                    <img src="./Salvium_assets/coin_icon/white/circular/transparent/salvium_coin_white_512x512px_transparent.png" alt="Salvium Icon" class="h-8 w-8">
+                    <img src="./Salvium_assets/wordmark_logo/white/transparent/salvium_wordmark_white_512x512px_transparent.png" alt="Salvium Wordmark" class="h-8 hidden md:block">
+                </a>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-white hover:text-[#0AEB85] transition-colors">Home</a>
+                <a href="stats.html" class="text-white hover:text-[#0AEB85] transition-colors">Stats</a>
+                <a href="roadmap.html" class="text-white hover:text-[#0AEB85] transition-colors">Roadmap</a>
+                <a href="knowledge-base.html" class="text-white hover:text-[#0AEB85] transition-colors">Knowledge Base</a>
+                <a href="#community" class="text-white hover:text-[#0AEB85] transition-colors">Community</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden flex flex-col space-y-1.5 z-50" onclick="toggleMobileMenu()">
+                <span class="w-6 h-0.5 bg-white transition-all"></span>
+                <span class="w-6 h-0.5 bg-white transition-all"></span>
+                <span class="w-6 h-0.5 bg-white transition-all"></span>
+            </button>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-menu md:hidden p-6">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-white hover:text-[#0AEB85] transition-colors text-lg">Home</a>
+                    <a href="stats.html" class="text-white hover:text-[#0AEB85] transition-colors text-lg">Stats</a>
+                    <a href="roadmap.html" class="text-white hover:text-[#0AEB85] transition-colors text-lg">Roadmap</a>
+                    <a href="knowledge-base.html" class="text-white hover:text-[#0AEB85] transition-colors text-lg">Knowledge Base</a>
+                    <a href="#community" class="text-white hover:text-[#0AEB85] transition-colors text-lg">Community</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative flex items-center overflow-hidden pt-20 pb-12 md:pt-32 md:pb-20">
+        <div id="particles-container" class="absolute inset-0"></div>
+        <div class="hero-gradient absolute inset-0"></div>
+        <canvas id="matrix-bg" class="matrix-bg"></canvas>
+        
+        <div class="container mx-auto px-4 relative z-10 mobile-container">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+                <!-- Left Column -->
+                <div class="text-left mobile-center mobile-mb" data-aos="fade-right">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 mobile-smaller-text">
+                        The Future of <span class="gradient-text">Private DeFi</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-300 mb-6 md:mb-8">
+                        Experience true financial privacy with Salvium's innovative blockchain technology.
+                    </p>
+                    <div class="flex flex-wrap gap-3 mb-8 md:mb-12 mobile-stack justify-center lg:justify-start">
+                        <a href="#" class="get-started-btn px-6 md:px-8 py-3 rounded-full font-semibold inline-block mobile-full lg:w-auto">
+                            Get Started
+                        </a>
+                        <a href="knowledge-base.html" class="px-6 md:px-8 py-3 rounded-full border border-[var(--primary-color)] text-white font-semibold inline-block hover:bg-[var(--primary-color)] hover:text-black transition duration-300 mobile-full lg:w-auto">
+                            Learn More
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mobile-stack-grid">
+                        <div class="hero-stats rounded-xl p-3 md:p-4 text-center mobile-reduced-padding">
+                            <h3 class="text-xl md:text-2xl font-bold gradient-text mobile-smaller-stats">$500M+</h3>
+                            <p class="text-xs md:text-sm text-gray-400">Total Value Locked</p>
+                        </div>
+                        <div class="hero-stats rounded-xl p-3 md:p-4 text-center mobile-reduced-padding">
+                            <h3 class="text-xl md:text-2xl font-bold gradient-text mobile-smaller-stats">100k+</h3>
+                            <p class="text-xs md:text-sm text-gray-400">Active Users</p>
+                        </div>
+                        <div class="hero-stats rounded-xl p-3 md:p-4 text-center mobile-reduced-padding">
+                            <h3 class="text-xl md:text-2xl font-bold gradient-text mobile-smaller-stats">1M+</h3>
+                            <p class="text-xs md:text-sm text-gray-400">Transactions</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column -->
+                <div class="relative mobile-mt" data-aos="fade-left">
+                    <div class="relative z-20 flex justify-center items-center mb-8">
+                        <div class="floating bg-[var(--secondary-color)] rounded-full p-3 md:p-4" style="transform-origin: center center;">
+                            <img src="./Salvium_assets/coin_icon/white/circular/transparent/salvium_coin_white_512x512px_transparent.png" alt="Salvium Icon" class="w-32 h-32 md:w-40 md:h-40 mobile-logo">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 relative z-10">
+                        <div class="hero-card rounded-xl p-3 md:p-4 text-center mobile-reduced-padding">
+                            <h3 class="text-lg md:text-lg font-semibold mb-2">Private Transactions</h3>
+                            <p class="text-xs md:text-sm text-gray-400">Complete privacy for all your DeFi operations</p>
+                        </div>
+                        <div class="hero-card rounded-xl p-3 md:p-4 text-center mobile-reduced-padding">
+                            <h3 class="text-lg md:text-lg font-semibold mb-2">Smart Contracts</h3>
+                            <p class="text-xs md:text-sm text-gray-400">Advanced programmable privacy features</p>
+                        </div>
+                        <div class="hero-card rounded-xl p-3 md:p-4 text-center mobile-reduced-padding">
+                            <h3 class="text-lg md:text-lg font-semibold mb-2">Cross-Chain</h3>
+                            <p class="text-xs md:text-sm text-gray-400">Seamless integration with major blockchains</p>
+                        </div>
+                        <div class="hero-card rounded-xl p-3 md:p-4 text-center mobile-reduced-padding">
+                            <h3 class="text-lg md:text-lg font-semibold mb-2">High Security</h3>
+                            <p class="text-xs md:text-sm text-gray-400">Military-grade encryption protocols</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">
+                Why Choose <span class="gradient-text">Salvium</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-card p-8 rounded-2xl text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="glass-effect p-4 mb-4 inline-block">
+                        <div class="icon-container">
+                            <div class="icon-glow"></div>
+                            <svg class="feature-icon text-[var(--primary-color)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                                <circle cx="12" cy="17" r="1" fill="currentColor"/>
+                                <circle cx="12" cy="7" r="1" fill="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Compliant Privacy</h3>
+                    <p class="text-gray-400">Monero-grade privacy with compliance features that give it the edge in a regulated world.</p>
+                </div>
+                <div class="feature-card p-8 rounded-2xl text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="glass-effect p-4 mb-4 inline-block">
+                        <div class="icon-container">
+                            <div class="icon-glow"></div>
+                            <svg class="feature-icon text-[var(--primary-color)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 12C21 16.9706 16.9706 21 12 21M21 12C21 7.02944 16.9706 3 12 3M21 12H17M12 21C7.02944 21 3 16.9706 3 12M12 21V17M3 12C3 7.02944 7.02944 3 12 3M3 12H7M12 3V7" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 12L16 10M12 12L14 16M12 12L8 14M12 12L10 8" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                                <circle cx="12" cy="12" r="0.5" fill="white"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Private DeFi</h3>
+                    <p class="text-gray-400">Built with Transactional Imbalances and Asynchronous Transactions, enabling private, secure DeFi solutions.</p>
+                </div>
+                <div class="feature-card p-8 rounded-2xl text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="glass-effect p-4 mb-4 inline-block">
+                        <div class="icon-container">
+                            <div class="icon-glow"></div>
+                            <svg class="feature-icon text-[var(--primary-color)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 7V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 12L8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Staking Rewards</h3>
+                    <p class="text-gray-400">Earn yield privately with staking. Receive 20% of the block rewards while securing the network.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ecosystem Section -->
+    <section id="ecosystem" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">
+                Salvium <span class="gradient-text">Ecosystem</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="feature-card p-8 rounded-2xl" data-aos="fade-right">
+                    <div class="glass-effect p-4 mb-6 inline-block">
+                        <div class="icon-container">
+                            <div class="icon-glow"></div>
+                            <svg class="text-[var(--primary-color)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                                <circle cx="12" cy="17" r="1" fill="currentColor"/>
+                                <circle cx="12" cy="7" r="1" fill="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">DeFi Innovation</h3>
+                    <p class="text-gray-400 mb-6">Shaping the future of decentralized finance with groundbreaking features:</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <span class="text-[var(--primary-color)] mr-2">✓</span>
+                            <span class="text-gray-300">Transactional Imbalances (TI)</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-[var(--primary-color)] mr-2">✓</span>
+                            <span class="text-gray-300">Asynchronous Transactions (AT)</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-[var(--primary-color)] mr-2">✓</span>
+                            <span class="text-gray-300">Conditional Payments (CP)</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="feature-card p-8 rounded-2xl" data-aos="fade-left">
+                    <div class="glass-effect p-4 mb-6 inline-block">
+                        <div class="icon-container">
+                            <div class="icon-glow"></div>
+                            <svg class="text-[var(--primary-color)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 12C21 16.9706 16.9706 21 12 21M21 12C21 7.02944 16.9706 3 12 3M21 12H17M12 21C7.02944 21 3 16.9706 3 12M12 21V17M3 12C3 7.02944 7.02944 3 12 3M3 12H7M12 3V7" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 12L16 10M12 12L14 16M12 12L8 14M12 12L10 8" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                                <circle cx="12" cy="12" r="0.5" fill="white"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Ecosystem Features</h3>
+                    <p class="text-gray-400 mb-6">A comprehensive suite of features for the future of private finance:</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <span class="text-[var(--primary-color)] mr-2">✓</span>
+                            <span class="text-gray-300">Layer-2 Networks</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-[var(--primary-color)] mr-2">✓</span>
+                            <span class="text-gray-300">Cross-Chain Integration</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-[var(--primary-color)] mr-2">✓</span>
+                            <span class="text-gray-300">Private Smart Contracts</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-black bg-opacity-50">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-8" data-aos="fade-up">
+                Ready to Take the <span class="gradient-text">Pill</span>?
+            </h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+                Start your journey with Salvium today and be part of the next generation of Private DeFi.
+            </p>
+            <a href="#" class="btn-primary px-12 py-4 rounded-full text-black font-semibold inline-block" data-aos="fade-up" data-aos-delay="200">
+                Get Started Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-gray-800 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <img src="Salvium_assets/wordmark_logo/white/transparent/salvium_wordmark_white_512x512px_transparent.png" alt="Salvium Logo" style="height:80px;width:auto;" class="mb-8">
+                    <p class="text-gray-400">Private blockchain with DeFi</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://salvium.io/papers/" class="text-gray-400 hover:text-white">Litepaper</a></li>
+                        <li><a href="knowledge-base.html" class="text-gray-400 hover:text-white">Knowledge Base</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">GitHub</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Ecosystem</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://salvium.io/exchanges/" class="text-gray-400 hover:text-white">Exchanges</a></li>
+                        <li><a href="https://salvium.io/downloads/" class="text-gray-400 hover:text-white">Downloads</a></li>
+                        <li><a href="https://explorer.salvium.io" class="text-gray-400 hover:text-white">Block Explorer</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Community</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://x.com/salvium_io" class="text-gray-400 hover:text-white flex items-center gap-2">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                            Twitter
+                        </a></li>
+                        <li><a href="https://discord.com/invite/P3rrAjkyYs" class="text-gray-400 hover:text-white flex items-center gap-2">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+                            </svg>
+                            Discord
+                        </a></li>
+                        <li><a href="https://t.me/salviumcommunity" class="text-gray-400 hover:text-white flex items-center gap-2">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.68c.223-.198-.05-.308-.346-.11l-6.4 4.02-2.76-.918c-.6-.183-.612-.6.125-.89l10.782-4.156c.5-.183.943.112.784.89z"/>
+                            </svg>
+                            Telegram
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400">
+                <p>&copy; 2024 Salvium. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize AOS animations
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Matrix rain effect
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%";
+        const matrixChars = matrix.split('');
+
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for(let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(24, 24, 24, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0AEB85';
+            ctx.font = fontSize + 'px monospace';
+
+            for(let i = 0; i < drops.length; i++) {
+                const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        setInterval(drawMatrix, 50);
+
+        // Particle animation
+        function createParticle() {
+            const container = document.getElementById('particles-container');
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Random size between 2 and 6 pixels
+            const size = Math.random() * 4 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random position
+            const posX = Math.random() * window.innerWidth;
+            const posY = Math.random() * window.innerHeight;
+            particle.style.left = `${posX}px`;
+            particle.style.top = `${posY}px`;
+            
+            container.appendChild(particle);
+            
+            // Animate the particle
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 1 + 0.5;
+            const dx = Math.cos(angle) * velocity;
+            const dy = Math.sin(angle) * velocity;
+            
+            let x = posX;
+            let y = posY;
+            
+            function animate() {
+                x += dx;
+                y += dy;
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                
+                // Remove particle if it's out of viewport
+                if (x < -10 || x > window.innerWidth + 10 || y < -10 || y > window.innerHeight + 10) {
+                    particle.remove();
+                } else {
+                    requestAnimationFrame(animate);
+                }
+            }
+            
+            animate();
+        }
+
+        // Create new particles periodically
+        setInterval(createParticle, 200);
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            menu.classList.toggle('active');
+            
+            // Toggle menu button animation
+            const button = event.currentTarget;
+            const spans = button.getElementsByTagName('span');
+            button.classList.toggle('active');
+            
+            if (button.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobileMenu');
+            const button = document.querySelector('.md\\:hidden.flex.flex-col');
+            
+            if (menu.style.display === 'block' && 
+                !menu.contains(event.target) && 
+                !button.contains(event.target)) {
+                toggleMobileMenu();
+            }
+        });
+
+        // Handle mobile menu links
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggleMobileMenu();
+            });
+        });
+    </script>
+</body>
+</html>

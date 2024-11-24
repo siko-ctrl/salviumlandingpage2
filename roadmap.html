@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salvium Roadmap - The Future of Private Blockchain</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="./js/include-footer.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #0AEB85;
+            --secondary-color: #181818;
+            --text-color: #FFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #0AEB85, #08c46e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .phase-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(10, 235, 133, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(10, 235, 133, 0.3);
+            box-shadow: 0 10px 30px rgba(10, 235, 133, 0.1);
+        }
+
+        .timeline-line {
+            background: linear-gradient(to bottom, transparent, #0AEB85, transparent);
+        }
+
+        .phase-number {
+            background: linear-gradient(45deg, #0AEB85, #08c46e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 4rem;
+            font-weight: 700;
+            opacity: 0.3;
+            position: absolute;
+            top: -1rem;
+            left: -1rem;
+        }
+
+        .glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(10, 235, 133, 0.1) 0%, rgba(24, 24, 24, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .feature-item {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .feature-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 8px;
+            height: 8px;
+            background: #0AEB85;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar fixed w-full top-0 z-50 px-4 py-4 bg-[#181818]/80 backdrop-blur-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="index.html" class="text-white text-2xl font-bold">
+                    <img src="./Salvium_assets/wordmark_logo/white/transparent/salvium_wordmark_white_512x512px_transparent.png" alt="Salvium Logo" class="h-12">
+                </a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-white hover:text-[#0AEB85] transition-colors">Home</a>
+                <a href="stats.html" class="text-white hover:text-[#0AEB85] transition-colors">Stats</a>
+                <a href="roadmap.html" class="text-white hover:text-[#0AEB85] transition-colors">Roadmap</a>
+                <a href="knowledge-base.html" class="text-white hover:text-[#0AEB85] transition-colors">Knowledge Base</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 relative overflow-hidden">
+        <div class="container mx-auto px-4">
+            <h1 class="text-5xl md:text-6xl font-bold text-center mb-8" data-aos="fade-up">
+                Our <span class="gradient-text">Roadmap</span>
+            </h1>
+            <p class="text-xl text-center text-gray-400 max-w-3xl mx-auto mb-20" data-aos="fade-up" data-aos-delay="100">
+                Discover the journey ahead as we revolutionize private blockchain technology with compliance and innovation at its core.
+            </p>
+        </div>
+    </section>
+
+    <!-- Roadmap Timeline -->
+    <section class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <div class="relative">
+                <!-- Phase 1 -->
+                <div class="phase-card relative p-8 mb-16 rounded-2xl" data-aos="fade-right">
+                    <span class="phase-number">01</span>
+                    <div class="glow"></div>
+                    <h2 class="text-3xl font-bold mb-6 gradient-text">Phase 1: Launch Salvium</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-4 text-[#0AEB85]">Staking and Yield Generation</h3>
+                                <p class="text-gray-300 leading-relaxed feature-item">
+                                    Users can stake their SAL tokens to earn rewards, fostering a secure and engaged network through Salvium's evolved privacy capabilities.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-4 text-[#0AEB85]">Compliance</h3>
+                                <p class="text-gray-300 leading-relaxed feature-item">
+                                    Introduction of refundable transactions, allowing recipients to return unauthorized funds to senders without address requests - a groundbreaking feature for Monero-based chains.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="phase-card relative p-8 mb-16 rounded-2xl" data-aos="fade-left">
+                    <span class="phase-number">02</span>
+                    <div class="glow"></div>
+                    <h2 class="text-3xl font-bold mb-6 gradient-text">Phase 2: Additional Compliance Features</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-[#0AEB85]">Private Blockchain with Compliance Features</h3>
+                            <p class="text-gray-300 leading-relaxed feature-item">
+                                Meeting EU's MiCA regulations while maintaining transaction privacy through authorized view key access for exchanges and regulatory entities.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-[#0AEB85]">Technology Advancement</h3>
+                            <p class="text-gray-300 leading-relaxed feature-item">
+                                Supporting and contributing to compliance efforts including Full chain membership proofs, SERAPHIS, and JAMTIS, furthering Monero and Cryptonote technologies.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="phase-card relative p-8 rounded-2xl" data-aos="fade-right">
+                    <span class="phase-number">03</span>
+                    <div class="glow"></div>
+                    <h2 class="text-3xl font-bold mb-6 gradient-text">Phase 3: DeFi Support</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-4 text-[#0AEB85]">Smart Contract Functionality</h3>
+                                <p class="text-gray-300 leading-relaxed feature-item">
+                                    Enabling secure and private DeFi applications through protocol_tx innovation and smart contract capabilities.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-4 text-[#0AEB85]">Middleware for Solidity</h3>
+                                <p class="text-gray-300 leading-relaxed feature-item">
+                                    Streamlining adoption by providing middleware for easy deployment of Solidity-based DApps on the Salvium network.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        AOS.init({
+            duration: 1000,
+            offset: 100,
+            once: true
+        });
+
+        // Glow effect following mouse
+        document.addEventListener('mousemove', (e) => {
+            const glows = document.querySelectorAll('.glow');
+            glows.forEach(glow => {
+                const rect = glow.parentElement.getBoundingClientRect();
+                const x = e.clientX - rect.left - 100;
+                const y = e.clientY - rect.top - 100;
+                
+                if (e.clientX > rect.left && e.clientX < rect.right &&
+                    e.clientY > rect.top && e.clientY < rect.bottom) {
+                    glow.style.opacity = '1';
+                    glow.style.transform = `translate(${x}px, ${y}px)`;
+                } else {
+                    glow.style.opacity = '0';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

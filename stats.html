@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salvium Stats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.7/tippy.min.css">
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="./js/include-footer.js"></script>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        /* Theme Toggle Styles */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 20;
+        }
+
+        .theme-toggle button {
+            background: #333;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle button:hover {
+            background: #444;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            opacity: 0.6;
+            filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+            transition: opacity 0.2s, filter 0.2s;
+        }
+
+        .card:hover .card-icon {
+            opacity: 1;
+            filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
+        }
+
+        /* Chart Styles */
+        .chart-container {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #333;
+            margin-top: 1.5rem;
+            position: relative;
+        }
+
+        /* Theme Transition */
+        .theme-transition {
+            transition: 
+                background-color 0.3s ease, 
+                color 0.3s ease, 
+                border-color 0.3s ease;
+        }
+
+        /* Light Theme */
+        .light {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #495057;
+            --text-heading: #212529;
+            --accent-primary: #0d6efd;
+            --accent-hover: #0a58ca;
+            --border-color: #dee2e6;
+            --shadow-color: rgba(0,0,0,0.08);
+        }
+
+        .light body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .light .card {
+            background-color: var(--bg-primary);
+            border-color: var(--border-color);
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .card {
+                padding: 1rem;
+            }
+
+            .chart-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading-bar {
+            height: 3px;
+            background: linear-gradient(to right, #00ff00, #00cc00);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="bg-[#1a1a1a] text-white min-h-screen">
+    <!-- Loading Bar -->
+    <div id="loadingBar" class="loading-bar hidden"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-[#181818] bg-opacity-90 backdrop-blur-md z-50 border-b border-white/10">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center">
+                    <img src="./Salvium-logo_REV.png" alt="Salvium Logo" class="h-8">
+                </a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link hover:text-green-400 transition-colors">Home</a>
+                    <a href="roadmap.html" class="nav-link hover:text-green-400 transition-colors">Roadmap</a>
+                    <a href="stats.html" class="nav-link text-green-400">Stats</a>
+                    <a href="knowledge-base.html" class="nav-link hover:text-green-400 transition-colors">Knowledge Base</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button 
+                        id="themeToggle" 
+                        class="w-10 h-10 flex items-center justify-center rounded-full focus:outline-none shadow-sm hover:shadow-md transition-all duration-200"
+                    >
+                        🌙
+                    </button>
+                    <button class="md:hidden">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pt-24">
+        <!-- Last Updated -->
+        <div class="mb-8">
+            <div class="text-gray-400 text-sm">Last Updated</div>
+            <div id="lastUpdated" class="text-green-400"></div>
+        </div>
+
+        <!-- Key Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div class="stats-card bg-[#282828] p-6 rounded-lg border border-white/10" data-aos="fade-up" data-aos-delay="100">
+                <h3 class="text-gray-400 mb-2">Current Price</h3>
+                <p class="text-3xl value-text" id="currentPrice">$0.00</p>
+                <p class="text-sm text-gray-400 mt-2" id="priceChange">24h Change: 0%</p>
+            </div>
+            <div class="stats-card bg-[#282828] p-6 rounded-lg border border-white/10" data-aos="fade-up" data-aos-delay="200">
+                <h3 class="text-gray-400 mb-2">Market Cap</h3>
+                <p class="text-3xl value-text" id="marketCap">$0</p>
+                <p class="text-sm text-gray-400 mt-2">Fully Diluted</p>
+            </div>
+            <div class="stats-card bg-[#282828] p-6 rounded-lg border border-white/10" data-aos="fade-up" data-aos-delay="300">
+                <h3 class="text-gray-400 mb-2">24h Volume</h3>
+                <p class="text-3xl value-text" id="volume">$0</p>
+                <p class="text-sm text-gray-400 mt-2" id="volumeChange">Change: 0%</p>
+            </div>
+        </div>
+
+        <!-- Network Stats -->
+        <div class="mb-12">
+            <h2 class="text-2xl font-bold mb-6" data-aos="fade-up">Network Statistics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="stats-card bg-[#282828] p-6 rounded-lg border border-white/10" data-aos="fade-up">
+                    <h3 class="text-gray-400 mb-2">Block Height</h3>
+                    <p class="text-3xl value-text" id="blockHeight">0</p>
+                </div>
+                <div class="stats-card bg-[#282828] p-6 rounded-lg border border-white/10" data-aos="fade-up">
+                    <h3 class="text-gray-400 mb-2">Network Hashrate</h3>
+                    <p class="text-3xl value-text" id="networkHash">0 H/s</p>
+                </div>
+                <div class="stats-card bg-[#282828] p-6 rounded-lg border border-white/10" data-aos="fade-up">
+                    <h3 class="text-gray-400 mb-2">Circulating Supply</h3>
+                    <p class="text-3xl value-text" id="supply">0 SAL</p>
+                </div>
+                <div class="stats-card bg-[#282828] p-6 rounded-lg border border-white/10" data-aos="fade-up">
+                    <h3 class="text-gray-400 mb-2">Burned Supply</h3>
+                    <p class="text-3xl value-text" id="burnt">0 SAL</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Price Chart -->
+            <div class="chart-container bg-[#282828] p-6 rounded-lg border border-white/10" data-aos="fade-up">
+                <h3 class="text-xl font-semibold mb-4">Price History</h3>
+                <div id="priceChart" class="h-[400px]"></div>
+            </div>
+            
+            <!-- Volume Chart -->
+            <div class="chart-container bg-[#282828] p-6 rounded-lg border border-white/10" data-aos="fade-up">
+                <h3 class="text-xl font-semibold mb-4">Trading Volume</h3>
+                <div id="volumeChart" class="h-[400px]"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // API Configuration
+        const API_CONFIG = {
+            LIVECOINWATCH: {
+                BASE_URL: 'https://api.livecoinwatch.com',
+                API_KEY: 'b80a7b75-f83f-48b5-9ae7-e80bf6bf2459',
+                HEADERS: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': 'b80a7b75-f83f-48b5-9ae7-e80bf6bf2459'
+                }
+            },
+            SALVIUM_NODE: {
+                BASE_URL: 'https://seed01.salvium.io:19081'
+            }
+        };
+
+        // Global variables
+        let circulatingSupply = 0;
+        let price = 0;
+
+        // Utility Functions
+        function logError(context, error) {
+            console.error(`[SALVIUM DEBUG] Error in ${context}:`, error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+                console.error('Response headers:', error.response.headers);
+            } else if (error.request) {
+                console.error('Request data:', error.request);
+            } else {
+                console.error('Error message:', error.message);
+            }
+        }
+
+        async function safeFetchWithLogging(fetchFunction, context) {
+            try {
+                console.log(`[SALVIUM DEBUG] Starting ${context}`);
+                const result = await fetchFunction();
+                console.log(`[SALVIUM DEBUG] ${context} completed successfully`);
+                return result;
+            } catch (error) {
+                logError(context, error);
+                throw error;
+            }
+        }
+
+        // Data Fetching Functions
+        async function fetchNodeInfo() {
+            try {
+                const response = await axios.post(`${API_CONFIG.SALVIUM_NODE.BASE_URL}/json_rpc`, {
+                    jsonrpc: "2.0",
+                    id: "0",
+                    method: "get_info",
+                });
+
+                const data = response.data.result;
+                updateNodeInfoUI(data);
+            } catch (error) {
+                logError("Node Info", error);
+                updateNodeInfoUIError();
+            }
+        }
+
+        async function fetchSupplyInfo() {
+            try {
+                const response = await axios.post(`${API_CONFIG.SALVIUM_NODE.BASE_URL}/json_rpc`, {
+                    jsonrpc: "2.0",
+                    id: "0",
+                    method: "get_supply_info",
+                });
+
+                const supplyData = response.data.result.supply_tally;
+                updateSupplyInfoUI(supplyData);
+            } catch (error) {
+                logError("Supply Info", error);
+                updateSupplyInfoUIError();
+            }
+        }
+
+        // UI Update Functions
+        function updateNodeInfoUI(data) {
+            document.getElementById("blockHeight").textContent = data.height || "N/A";
+            if (data.difficulty && data.target) {
+                const hashrate = (data.difficulty / data.target) / 1e6;
+                document.getElementById("networkHash").textContent = `${hashrate.toFixed(2)} MH/s`;
+            }
+        }
+
+        function updateNodeInfoUIError() {
+            document.getElementById("blockHeight").textContent = "Error";
+            document.getElementById("networkHash").textContent = "Error";
+        }
+
+        function updateSupplyInfoUI(supplyData) {
+            const rawSupply = supplyData.find((item) => item.currency_label === "SAL")?.amount || 0;
+            const rawBurnt = supplyData.find((item) => item.currency_label === "BURN")?.amount || 0;
+
+            circulatingSupply = rawSupply / 1e8;
+            const burnt = rawBurnt / 1e8;
+
+            document.getElementById("supply").textContent = `${circulatingSupply.toFixed(2)} SAL`;
+            document.getElementById("burnt").textContent = `${burnt.toFixed(2)} SAL`;
+            calculateMarketCap();
+        }
+
+        function updateSupplyInfoUIError() {
+            document.getElementById("supply").textContent = "Error";
+            document.getElementById("burnt").textContent = "Error";
+        }
+
+        // Theme Management
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            applyTheme(savedTheme);
+        }
+
+        function applyTheme(theme) {
+            document.body.classList.add('theme-transition');
+            const htmlElement = document.documentElement;
+
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark');
+                htmlElement.classList.remove('light');
+                localStorage.setItem('theme', 'dark');
+                document.getElementById('themeToggle').innerHTML = '🌙';
+            } else {
+                htmlElement.classList.remove('dark');
+                htmlElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                document.getElementById('themeToggle').innerHTML = '☀️';
+            }
+
+            setTimeout(() => {
+                document.body.classList.remove('theme-transition');
+            }, 300);
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('[SALVIUM DEBUG] DOM Content Loaded - Starting initialization...');
+            
+            // Initialize theme
+            initializeTheme();
+            
+            // Initialize tooltips
+            tippy('[data-tippy-content]');
+            
+            // Add theme toggle listener
+            document.getElementById('themeToggle').addEventListener('click', () => {
+                const currentTheme = localStorage.getItem('theme') || 'dark';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+
+            try {
+                await Promise.all([
+                    fetchNodeInfo(),
+                    fetchSupplyInfo(),
+                    fetchPriceInfo(),
+                    fetchYieldInfo()
+                ]);
+                console.log('[SALVIUM DEBUG] Initial data fetch complete');
+                updateLastUpdated();
+                await updateCharts();
+            } catch (error) {
+                logError('Initial Data Fetch', error);
+            }
+
+            // Set up periodic updates
+            setInterval(async () => {
+                console.log('[SALVIUM DEBUG] Running periodic update...');
+                try {
+                    await Promise.all([
+                        fetchNodeInfo(),
+                        fetchSupplyInfo(),
+                        fetchPriceInfo(),
+                        fetchYieldInfo()
+                    ]);
+                    console.log('[SALVIUM DEBUG] Periodic update complete');
+                    updateLastUpdated();
+                    await updateCharts();
+                } catch (error) {
+                    logError('Periodic Update', error);
+                }
+            }, 60000);
+        });
+
+        // Price and Market Data Functions
+        async function fetchPriceInfo() {
+            try {
+                const response = await axios.post(`${API_CONFIG.LIVECOINWATCH.BASE_URL}/coins/single`, {
+                    currency: 'USD',
+                    code: 'SAL',
+                    meta: true
+                }, {
+                    headers: API_CONFIG.LIVECOINWATCH.HEADERS
+                });
+
+                const data = response.data;
+                price = data.rate;
+                
+                document.getElementById('currentPrice').textContent = `$${price.toFixed(4)}`;
+                document.getElementById('priceChange').textContent = `24h Change: ${data.delta.day.toFixed(2)}%`;
+                document.getElementById('marketCap').textContent = `$${(data.volume * price).toLocaleString()}`;
+                document.getElementById('volume').textContent = `$${data.volume.toLocaleString()}`;
+                
+                return data;
+            } catch (error) {
+                logError('Price Info', error);
+                document.getElementById('currentPrice').textContent = 'Error';
+                document.getElementById('priceChange').textContent = 'Error';
+                document.getElementById('marketCap').textContent = 'Error';
+                document.getElementById('volume').textContent = 'Error';
+            }
+        }
+
+        // Chart Functions
+        async function updateCharts() {
+            try {
+                const priceHistory = await fetchPriceHistory();
+                const volumeHistory = await fetchVolumeHistory();
+                
+                // Update Price Chart
+                const priceTrace = {
+                    x: priceHistory.map(p => new Date(p.time)),
+                    y: priceHistory.map(p => p.price),
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'Price',
+                    line: {
+                        color: '#0AEB85',
+                        width: 2
+                    }
+                };
+
+                const priceLayout = {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: {
+                        color: '#fff'
+                    },
+                    xaxis: {
+                        gridcolor: '#333',
+                        title: 'Date'
+                    },
+                    yaxis: {
+                        gridcolor: '#333',
+                        title: 'Price (USD)'
+                    },
+                    margin: { t: 0, r: 10, l: 50, b: 40 }
+                };
+
+                Plotly.newPlot('priceChart', [priceTrace], priceLayout);
+
+                // Update Volume Chart
+                const volumeTrace = {
+                    x: volumeHistory.map(v => new Date(v.time)),
+                    y: volumeHistory.map(v => v.volume),
+                    type: 'bar',
+                    marker: {
+                        color: '#00D9CC'
+                    }
+                };
+
+                const volumeLayout = {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: {
+                        color: '#fff'
+                    },
+                    xaxis: {
+                        gridcolor: '#333',
+                        title: 'Date'
+                    },
+                    yaxis: {
+                        gridcolor: '#333',
+                        title: 'Volume (USD)'
+                    },
+                    margin: { t: 0, r: 10, l: 50, b: 40 }
+                };
+
+                Plotly.newPlot('volumeChart', [volumeTrace], volumeLayout);
+            } catch (error) {
+                logError('Chart Update', error);
+            }
+        }
+
+        async function fetchPriceHistory() {
+            try {
+                const response = await axios.post(`${API_CONFIG.LIVECOINWATCH.BASE_URL}/coins/single/history`, {
+                    currency: 'USD',
+                    code: 'SAL',
+                    start: Date.now() - (30 * 24 * 60 * 60 * 1000), // 30 days ago
+                    end: Date.now(),
+                    meta: true
+                }, {
+                    headers: API_CONFIG.LIVECOINWATCH.HEADERS
+                });
+
+                return response.data.history;
+            } catch (error) {
+                logError('Price History', error);
+                return [];
+            }
+        }
+
+        async function fetchVolumeHistory() {
+            try {
+                const response = await axios.post(`${API_CONFIG.LIVECOINWATCH.BASE_URL}/coins/single/history`, {
+                    currency: 'USD',
+                    code: 'SAL',
+                    start: Date.now() - (30 * 24 * 60 * 60 * 1000), // 30 days ago
+                    end: Date.now(),
+                    meta: true
+                }, {
+                    headers: API_CONFIG.LIVECOINWATCH.HEADERS
+                });
+
+                return response.data.history.map(h => ({
+                    time: h.time,
+                    volume: h.volume
+                }));
+            } catch (error) {
+                logError('Volume History', error);
+                return [];
+            }
+        }
+
+        function updateLastUpdated() {
+            const now = new Date();
+            document.getElementById('lastUpdated').textContent = now.toLocaleString();
+        }
+    </script>
+</body>
+</html>
